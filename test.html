@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Django crud</h1>
+
+    <h2>add book</h2>
+    book name: <input id="bookname">
+    book author: <input id="bookauthor">
+    <button onclick="addBook()">add</button>
+    <hr>
+    <h2>All books</h2>
+    <div id="display"></div>
+
+    <script>
+
+        const SERVER = 'http://127.0.0.1:8000/home'
+        // get data and update display
+        axios.get(SERVER).then(res => display.innerHTML = res.data.map(book => `<div>
+            book name: ${book.name},
+            book author: ${book.author},
+            <button onclick="delData(${book.id})">delete</button>
+            <button onclick="updData(${book.id})">update</button>
+            </div>`).join(""))
+        // delete function
+        const delData = (id) => {
+            axios.delete(`${SERVER}/${id}`)
+        }
+        // add book function
+        const addBook = () => {
+            axios.post(SERVER,
+                {
+                    name: bookname.value,
+                    author: bookauthor.value
+                }
+            )
+        }
+        // update function
+        const updData = (id) => {
+            axios.put(`${SERVER}/${id}`,
+                {
+                    name: bookname.value,
+                    author: bookauthor.value
+                }
+            )
+        }
+
+    </script>
+
+</body>
+
+</html>
